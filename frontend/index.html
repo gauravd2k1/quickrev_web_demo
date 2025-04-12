@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuickRev - Turn Book Pages into Quizzes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-dark: #3730A3;
+      --secondary: #10B981;
+      --light: #F3F4F6;
+      --dark: #1F2937;
+      --accent: #F59E0B;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--dark);
+      background-color: #FAFAFA;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 60px 0;  /* Increased padding from 40px to 60px */
+      text-align: center;
+    }
+    
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+      margin-top: 20px; /* Added margin-top */
+    }
+    
+    header p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0.9;
+      padding: 0 20px; /* Added padding */
+    }
+    
+    .logo {
+      font-size: 2.8rem;
+      margin-bottom: 15px; /* Increased from 10px to 15px */
+      margin-top: 10px; /* Added margin-top */
+    }
+    
+    .demo-section {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      padding: 40px;
+      margin: -50px auto 50px auto;
+      max-width: 800px;
+      position: relative;
+    }
+    
+    .upload-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed #e5e7eb;
+      border-radius: 8px;
+      padding: 40px 20px;
+      margin: 20px 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .upload-container:hover {
+      border-color: var(--primary);
+      background-color: #F9FAFB;
+    }
+    
+    .file-input-label {
+      background-color: var(--primary);
+      color: white;
+      padding: 12px 25px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-block;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .file-input-label:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    
+    #imageInput {
+      display: none;
+    }
+    
+    .generate-btn {
+      background-color: var(--secondary);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+      display: block;
+      width: 220px;
+      margin: 20px auto;
+    }
+    
+    .generate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2);
+    }
+    
+    .generate-btn:disabled {
+      background-color: #9CA3AF;
+      cursor: not-allowed;
+    }
+    
+    #output {
+      margin-top: 30px;
+      min-height: 100px;
+    }
+    
+    #output.loading {
+      text-align: center;
+      padding: 30px;
+    }
+    
+    .mcq-result {
+      background-color: #F8FAFC;
+      border-left: 4px solid var(--secondary);
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    
+    .mcq-result h3 {
+      color: var(--secondary);
+      margin-bottom: 15px;
+    }
+    
+    #cta {
+      background: linear-gradient(135deg, var(--accent) 0%, #E97C00 100%);
+      border-radius: 12px;
+      padding: 30px;
+      color: white;
+      text-align: center;
+      margin: 40px 0;
+    }
+    
+    #cta p {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    
+    .app-btn {
+      background-color: white;
+      color: var(--accent);
+      border: none;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .app-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .app-btn img {
+      height: 24px;
+    }
+    
+    .features {
+      padding: 50px 0;
+      background-color: var(--light);
+    }
+    
+    .features h2 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 2rem;
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+    
+    .feature-card {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: var(--primary);
+    }
+    
+    .feature-card h3 {
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+    
+    footer {
+      background-color: var(--dark);
+      color: white;
+      padding: 30px 0;
+      text-align: center;
+    }
+    
+    .loader {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(79, 70, 229, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+      header {
+        padding: 40px 0; /* Adjusted for mobile */
+      }
+      
+      header h1 {
+        font-size: 2rem;
+      }
+      
+      .demo-section {
+        padding: 20px;
+        margin-top: -30px;
+      }
+      
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="brand-container">
+        <img src="https://turneratech.com/wp-content/uploads/2024/11/QuickRev_NO_BG_Logo-300x300.png" alt="QuickRev Logo" class="logo-image">
+        <div>
+          <h1>QuickRev: Snap & Revise</h1>
+          <p>Transform any book page into an interactive quiz in seconds</p>
+        </div>
+      </div>
+      <p class="powered-by">Powered by <strong>TurnEraTech</strong></p>
+    </div>
+  </header>
+  <br>
+  <br>
+
+  <div class="container">
+    <section class="demo-section">
+      <h2>Try It Now</h2>
+      <p>Upload a photo of any book page and instantly generate sample MCQs</p>
+      
+      <div class="upload-container" id="dropArea">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        <p>Drag & drop your image here or</p>
+        <label for="imageInput" class="file-input-label">Choose File</label>
+        <input type="file" id="imageInput" accept="image/*" />
+      </div>
+      
+      <button id="generateBtn" class="generate-btn" disabled>Generate MCQs</button>
+      
+      <div id="output"></div>
+      
+      <div id="cta" style="display:none;">
+        <p>💡 Ready for the full QuickRev experience?</p>
+        <ul style="text-align: left; margin: 20px 0; list-style-type: none;">
+          <li>✓ Generate unlimited quizzes</li>
+          <li>✓ Save and share your quizzes</li>
+          <li>✓ Track your progress over time</li>
+          <li>✓ Access our question database</li>
+        </ul>
+        <a href="https://play.google.com/store/apps/details?id=com.tt.quickrev" target="_blank">
+          <button class="app-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.9,5c1.2,0,2.1,0.9,2.1,2.1v9.8c0,1.2-0.9,2.1-2.1,2.1H6c-1.2,0-2.1-0.9-2.1-2.1V7.1C3.9,5.9,4.8,5,6,5H17.9z M4.9,7.1v9.8c0,0.6,0.5,1.1,1.1,1.1h11.9c0.6,0,1.1-0.5,1.1-1.1V7.1c0-0.6-0.5-1.1-1.1-1.1H6C5.4,6,4.9,6.5,4.9,7.1z M7.1,19.9h9.8c0.3,0,0.5,0.2,0.5,0.5c0,0.3-0.2,0.5-0.5,0.5H7.1c-0.3,0-0.5-0.2-0.5-0.5C6.6,20.1,6.8,19.9,7.1,19.9z"/>
+            </svg>
+            Download on Google Play
+          </button>
+        </a>
+        <p style="font-size: 0.9rem; margin-top: 15px;">Visit <a href="https://turneratech.com/quickrev-revise-smarter-quiz-better/" style="color: white; text-decoration: underline;">turneratech.com</a> for more information</p>
+      </div>
+    </section>
+  </div>
+  
+  <section class="features">
+    <div class="container">
+      <h2>Why QuickRev?</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Instant Quizzes</h3>
+          <p>Transform any textbook page into interactive MCQs in seconds</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>Study Smarter</h3>
+          <p>Reinforce your learning with automatically generated questions</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Targeted Learning</h3>
+          <p>Focus on key concepts with AI-powered question generation</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Study Anywhere</h3>
+          <p>Use the full app on your mobile device for on-the-go learning</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎓</div>
+          <h3>Exam Ready</h3>
+          <p>Practice with realistic MCQs that mirror actual test formats</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Track Progress</h3>
+          <p>Monitor your performance and identify areas for improvement</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <h3>AI-Powered Learning</h3>
+          <p>Our smart engine analyzes your performance to identify strengths and weaknesses, creating a personalized study path</p>
+        </div>        
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3>Adaptive Challenges</h3>
+          <p>Experience dynamic quizzes that evolve with your progress, focusing more on areas where you need improvement</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <br>
+  <br>
+
+  <!-- New Testimonials section -->
+  <section class="testimonials">
+    <div class="container">
+      <h2>What Our Users Say</h2>
+      <div class="testimonial-card">
+        <p class="testimonial-text">QuickRev transformed my study routine. I used to spend hours making flashcards, but now I can generate quizzes from any textbook in seconds!</p>
+        <p class="testimonial-author">- Amrit J, MPPSC Aspirant</p>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">As a teacher, this app helps me create assessments on the fly. My students love the interactive format and immediate feedback.</p>
+        <p class="testimonial-author">- Nandini K, High School Teacher, Bhopal . M.P.  </p>
+      </div>
+    </div>
+  </section>
+
+
+  <br>
+  <br>
+
+  <!-- FAQ Section -->
+<section class="faq-section">
+  <div class="container">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item">
+      <p class="faq-question">How does QuickRev generate questions?</p>
+      <p>QuickRev uses advanced AI to analyze text from book pages and generate relevant multiple-choice questions that test your understanding of key concepts.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-question">Does it work with all textbooks?</p>
+      <p>Yes! QuickRev works with textbooks across various subjects including science, mathematics, history, literature, and more.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-question">How many questions can I generate?</p>
+      <p>The free demo allows you to generate sample questions. With the full app, you can create unlimited quizzes from any textbook.</p>
+    </div>
+  </div>
+</section>
+
+<br>
+<br>
+
+  <footer>
+  <div class="container">
+    <div class="brand-info">
+      <img src="https://turneratech.com/wp-content/uploads/2024/11/QuickRev_NO_BG_Logo-300x300.png" alt="TurnEraTech Logo" class="footer-logo">
+      <p>A <strong>TurnEraTech</strong> Product</p>
+    </div>
+    <p>© 2025 QuickRev - All rights reserved</p>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+  <!-- Remove or replace this script block -->
+<script>
+  // Your updated JavaScript code here
+  const imageInput = document.getElementById('imageInput');
+  const generateBtn = document.getElementById('generateBtn');
+  const output = document.getElementById('output');
+  const dropArea = document.getElementById('dropArea');
+  
+  // Enable button only when a file is selected
+  imageInput.addEventListener('change', () => {
+    generateBtn.disabled = !imageInput.files.length;
+    
+    if (imageInput.files.length) {
+      // Show file name in drop area
+      const fileName = imageInput.files[0].name;
+      dropArea.innerHTML = `
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+        </svg>
+        <p>${fileName}</p>
+        <label for="imageInput" class="file-input-label">Change File</label>
+      `;
+    }
+  });
+  
+  // Drag and drop functionality
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false);
+  });
+  
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false);
+  });
+  
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false);
+  });
+  
+  function highlight() {
+    dropArea.style.borderColor = '#4F46E5';
+    dropArea.style.backgroundColor = '#F9FAFB';
+  }
+  
+  function unhighlight() {
+    dropArea.style.borderColor = '#e5e7eb';
+    dropArea.style.backgroundColor = 'white';
+  }
+  
+  dropArea.addEventListener('drop', handleDrop, false);
+  
+  function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    
+    if (files.length) {
+      imageInput.files = files;
+      generateBtn.disabled = false;
+      
+      // Show file name in drop area
+      const fileName = files[0].name;
+      dropArea.innerHTML = `
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+        </svg>
+        <p>${fileName}</p>
+        <label for="imageInput" class="file-input-label">Change File</label>
+      `;
+    }
+  }
+  
+  generateBtn.addEventListener('click', processImage);
+  
+  async function processImage() {
+    const file = imageInput.files[0];
+    if (!file) return;
+    
+    generateBtn.disabled = true;
+    output.innerHTML = '<div class="loading"><div class="loader"></div><p>Extracting text from image...</p></div>';
+    
+    try {
+      // Extract text using Tesseract
+      const { data: { text } } = await Tesseract.recognize(file, 'eng');
+      
+      output.innerHTML = '<div class="loading"><div class="loader"></div><p>Generating quiz questions...</p></div>';
+      
+      // Make the actual API call to your backend
+      const response = await fetch("http://localhost:5000/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: text })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Server responded with status: ${response.status}`);
+      }
+      
+      // Use the actual response from the API
+      const mcq = await response.json();
+      
+      // Display the questions from the API response
+      output.innerHTML = `
+        <div class="mcq-result">
+          <h3>Your Sample MCQs</h3>
+          <pre>${mcq.questions}</pre>
+        </div>
+      `;
+      
+      document.getElementById("cta").style.display = "block";
+      output.scrollIntoView({ behavior: 'smooth' });
+      
+    } catch (error) {
+      output.innerHTML = `<p>Error: ${error.message}</p>`;
+      console.error("Error processing image:", error);
+    } finally {
+      generateBtn.disabled = false;
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+body {
+  font-family: sans-serif;
+  padding: 2rem;
+  text-align: center;
+}
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+
+/* New styles for testimonials section */
+.testimonials {
+  background-color: white;
+  padding: 60px 0;
+}
+
+.testimonial-card {
+  background-color: #F8FAFC;
+  border-radius: 12px;
+  padding: 25px;
+  margin: 20px 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+.testimonial-card:before {
+  content: """;
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  font-size: 60px;
+  color: rgba(79, 70, 229, 0.1);
+  font-family: serif;
+}
+
+.testimonial-text {
+  padding-left: 15px;
+  font-style: italic;
+}
+
+.testimonial-author {
+  font-weight: 600;
+  margin-top: 15px;
+  text-align: right;
+}
+
+/* Additional FAQ section styles */
+.faq-section {
+  background-color: #F3F4F6;
+  padding: 60px 0;
+}
+
+.faq-item {
+  background-color: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin: 15px 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.faq-question {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--primary);
+}
+
+/* Add these styles for the logo and branding */
+.brand-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.logo-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.powered-by {
+  font-size: 1rem;
+  margin-top: 15px;
+  opacity: 0.9;
+}
+
+.powered-by strong {
+  color: #FFC107;
+  font-weight: 700;
+}
+
+.brand-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* Add this to the footer section */
+.brand-info .footer-logo {
+  width: 80px !important;
+  height: auto !important;
+  max-width: 80px !important;
+}
+
+footer .brand-info img {
+  width: 30px;
+  height: 30px;
+}
+
+.turneratech-logo {
+  width: 150px; /* Set your desired width */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: contain; /* Ensures the logo fits within the dimensions without distortion */
+}
+
+.footer-logo {
+  width: 150px !important;
+  height: auto !important;
+  max-width: 150px !important;
+  object-fit: contain !important;
+}
